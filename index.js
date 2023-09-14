@@ -18,6 +18,7 @@ app.use(require('cookie-parser')(credentials.cookieSecret));
 
 var session = require('express-session');
 var parseurl = require('parseurl');
+var fs = require('fs');
 
 app.use(session({
     resave: false,     // only save to session store if a change is made
@@ -42,6 +43,19 @@ app.get('/' , function(req , res){
 
 app.get('/about' , function(_req , res) {
     res.render('about');
+});
+
+app.get('/readfile', function(req, res, next){
+    fs.readFile('./public/randomtxt.txt', function(err, data){
+        if(err) return console.error(err);
+        res.send("the file: " + data.toString());
+    });
+})
+
+app.get('/writefile' , function(req , res, next) {
+    fs.writeFile('./public/randomfile2' , 'Additional random Text', function(err){
+        if(err) console.error(err);
+    });
 });
 
 app.get('/file-upload' , function(_req , res) {
